@@ -19,12 +19,12 @@ public class UpDownStage extends AbstractStage {
 
     @Override
     public StageResult play() {
-        System.out.println("    ____  ____  __  ___   ______     _____");
-        System.out.println("   / __ \\/ __ \\/ / / / | / / __ \\  / ___/");
-        System.out.println("  / /_/ / / / / / / /  |/ / / / / / /__  ");
-        System.out.println(" / _, _/ /_/ / /_/ / /|  / /_/ /  \\__, / ");
-        System.out.println("/_/ |_|\\____/\\____/_/ |_/_____/  /____/  ");
-        System.out.println("                                          ");
+        System.out.println("    ____  ____  __  ___   ______     ___ ");
+        System.out.println("   / __ \\/ __ \\/ / / / | / / __ \\   |__ \\");
+        System.out.println("  / /_/ / / / / / / /  |/ / / / /   __/ /");
+        System.out.println(" / _, _/ /_/ / /_/ / /|  / /_/ /   / __/ ");
+        System.out.println("/_/ |_|\\____/\\____/_/ |_/_____/   /____/ ");
+        System.out.println("                                         ");
         System.out.println("=========================================================");
         System.out.println("                   ⬆️ 업다운 게임 ⬇️                   ");
         System.out.println("=========================================================");

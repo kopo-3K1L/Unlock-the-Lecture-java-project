@@ -21,12 +21,12 @@ public class MazeStage extends AbstractStage {
 
     @Override
     public StageResult play() {
-        System.out.println("    ____  ____  __  ___   ______      _____");
-        System.out.println("   / __ \\/ __ \\/ / / / | / / __ \\   / __ )");
-        System.out.println("  / /_/ / / / / / / /  |/ / / / /  / / _ \\");
-        System.out.println(" / _, _/ /_/ / /_/ / /|  / /_/ /  | (_) | ");
-        System.out.println("/_/ |_|\\____/\\____/_/ |_/_____/    \\___/  ");
-        System.out.println("                                           ");
+        System.out.println("    ____  ____  __  ___   ______     ____ ");
+        System.out.println("   / __ \\/ __ \\/ / / / | / / __ \\   / __ \\");
+        System.out.println("  / /_/ / / / / / / /  |/ / / / /  / /_/ /");
+        System.out.println(" / _, _/ /_/ / /_/ / /|  / /_/ /   \\__, / ");
+        System.out.println("/_/ |_|\\____/\\____/_/ |_/_____/   /____/  ");
+        System.out.println("                                          ");
         System.out.println("=========================================================");
         System.out.println("                🧩 미로 탈출 게임 🧩                ");
         System.out.println("=========================================================");

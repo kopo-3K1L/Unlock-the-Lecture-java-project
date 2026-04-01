@@ -24,12 +24,12 @@ public class StairsStage extends AbstractStage {
 
     @Override
     public StageResult play() {
-        System.out.println("    ____  ____  __  ___   ______     _______");
-        System.out.println("   / __ \\/ __ \\/ / / / | / / __ \\      ___/ ");
-        System.out.println("  / /_/ / / / / / / /  |/ / / / /     / /   ");
-        System.out.println(" / _, _/ /_/ / /_/ / /|  / /_/ /     / /    ");
-        System.out.println("/_/ |_|\\____/\\____/_/ |_/_____/     /_/     ");
-        System.out.println("                                             ");
+        System.out.println("    ____  ____  __  ___   ______     ______ ");
+        System.out.println("   / __ \\/ __ \\/ / / / | / / __ \\   <  /__ \\");
+        System.out.println("  / /_/ / / / / / / /  |/ / / / /   / /__/ /");
+        System.out.println(" / _, _/ /_/ / /_/ / /|  / /_/ /   / // __/ ");
+        System.out.println("/_/ |_|\\____/\\____/_/ |_/_____/   /_//____/ ");
+        System.out.println("                                            ");
         System.out.println("=========================================================");
         System.out.println("               🪜 계단 오르기 게임 🪜               ");
         System.out.println("=========================================================");
