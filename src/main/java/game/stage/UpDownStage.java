@@ -65,7 +65,8 @@ public class UpDownStage extends AbstractStage {
             }
 
             if (guess == answer) {
-                io.println("수업한다");
+                io.println("🎯 정답! [수업한다] 를 맞췄습니다!");
+                io.println("🎉 다음 스테이지(강의)가 열렸습니다!");
                 return new StageResult(StageResultType.SUCCESS, "업다운 게임 클리어!");
             }
 

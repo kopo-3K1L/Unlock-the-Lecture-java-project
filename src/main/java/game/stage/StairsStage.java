@@ -63,7 +63,8 @@ public class StairsStage extends AbstractStage {
             }
         }
 
-        io.println("\n수업한다");
+        io.println("\n🪜 정상 도달! [수업한다]");
+        io.println("🎉 모든 스테이지(강의)를 클리어했습니다!");
         return new StageResult(StageResultType.SUCCESS, "계단 오르기 클리어!");
     }
 
