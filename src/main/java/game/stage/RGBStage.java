@@ -25,26 +25,35 @@ public class RGBStage extends AbstractStage {
         System.out.println(" / _, _/ /_/ / /_/ / /|  / /_/ /  /__  __/");
         System.out.println("/_/ |_|\\____/\\____/_/ |_/_____/     /_/   ");
         System.out.println("                                          ");
+
+
+        delay(600);
         System.out.println("=========================================================");
         System.out.println("                  🎨 색감 천재 모십니다 🎨                  ");
         System.out.println("=========================================================");
+        delay(600);
+
         System.out.println("목표: 아래의 [정답 색상]과 최대한 비슷한 색을 조합하세요!");
         System.out.println("오차가 50 이하가 되면 다음 강의가 열립니다.\n");
 
         System.out.print("팔레트 준비 중");
-        delayAction(600, 3);
+        delayAction(200, 3);
         System.out.println("\n");
 
         boolean isCleared = false;
 
         while (!isCleared) {
             printColorBlock("🎯 정답 색상:", targetR, targetG, targetB, false);
+            System.out.println();
+            delay(800);
 
-            System.out.println("\n▶ R, G, B 값을 차례대로 입력하세요 (0~255)");
             System.out.println("공통 명령어를 입력하려면 R 값에 skip / retry / exit 입력");
+            delay(200);
+            System.out.println("\n▶ R, G, B 값을 차례대로 입력하세요 (0~255)");
 
             io.print("R: ");
             String firstInput = io.nextLine();
+
             StageResult commandResult = checkCommonCommand(firstInput);
             if (commandResult != null) {
                 return commandResult;
@@ -54,14 +63,14 @@ public class RGBStage extends AbstractStage {
             try {
                 userR = clamp(Integer.parseInt(firstInput));
             } catch (NumberFormatException e) {
-                System.out.println("❌ 에러: 숫자만 입력해주세요!");
+                System.out.println("❌ 에러: 숫자만 입력할 수 있습니다! 다시 입력해주세요.");
                 continue;
             }
 
             int userG = clamp(io.nextInt("G: "));
             int userB = clamp(io.nextInt("B: "));
 
-            System.out.print("\n색상 조합 및 오차 계산 중");
+            System.out.print("\n🎨 색상 조합 및 오차 계산 중");
             delayAction(400, 3);
             System.out.println("\n");
 
@@ -74,7 +83,8 @@ public class RGBStage extends AbstractStage {
                 isCleared = true;
             } else {
                 System.out.println("\n❌ [ 수업 안 함 ] - 오차 범위 초과! (현재 오차: " + diff + " / 기준: 50)");
-                System.out.println("색상이 너무 다릅니다. 다시 맞춰보세요!");
+                System.out.println("색상이 너무 다릅니다. 다시 맞춰보세요!\n");
+                delay(600);
             }
         }
 

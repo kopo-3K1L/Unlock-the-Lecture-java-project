@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.Random;
 
 public class DarkStage extends AbstractStage {
-    private final int TOTAL_COUNT = 42;
+    private final int TOTAL_COUNT = 30;
     private String[] board = new String[TOTAL_COUNT];
     private boolean[] isChecked = new boolean[TOTAL_COUNT];
 
@@ -37,31 +37,31 @@ public class DarkStage extends AbstractStage {
         System.out.println(" / _, _/ /_/ / /_/ / /|  / /_/ /   / / /_/ / ");
         System.out.println("/_/ |_|\\____/\\____/_/ |_/_____/   /_/\\____/  ");
         System.out.println("                                             ");
+
+        delay(600);
         System.out.println("=========================================================");
         System.out.println("                🔦 암흑 속 진짜 글자 찾기 🔦                ");
         System.out.println("=========================================================");
-        System.out.println("어두운 화면에 42개의 글자가 엎어져 있습니다.");
+        delay(600);
+
+        System.out.println("어두운 화면에 30개의 글자가 엎어져 있습니다.");
         System.out.println("오직 1개만이 진짜 [수업한다] 입니다.");
         System.out.println("원하는 번호를 골라 손전등으로 비춰 글자를 확인하세요!\n");
 
         System.out.print("어둠 속으로 들어가는 중");
-        try {
-            for (int i = 0; i < 3; i++) {
-                Thread.sleep(800);
-                System.out.print(".");
-            }
-            System.out.println("\n");
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        delayAction(200, 3);
+        System.out.println("\n");
 
         boolean isCleared = false;
         int tryCount = 0;
 
         while (!isCleared) {
             printBoard();
+            delay(400);
 
-            System.out.print("\n▶ 몇 번째 위치를 손전등으로 비추시겠습니까? (1~42): ");
+            System.out.println("\n공통 명령어를 입력하려면 R 값에 skip / retry / exit 입력");
+            delay(200);
+            System.out.print("\n▶ 몇 번째 위치를 손전등으로 비추시겠습니까? (1~30): ");
             String input = io.nextLine();
 
             StageResult commandResult = checkCommonCommand(input);
@@ -78,14 +78,14 @@ public class DarkStage extends AbstractStage {
             }
 
             if (choice < 1 || choice > 42) {
-                System.out.println("❌ 1부터 42 사이의 숫자를 입력해주세요.");
+                System.out.println("❌ 1부터 30 사이의 숫자를 입력해주세요.");
                 continue;
             }
 
             int index = choice - 1;
 
             if (isChecked[index]) {
-                System.out.println("⚠️ 이미 확인한 곳입니다. 다른 곳을 비춰보세요!");
+                System.out.println("⚠️ 이미 확인한 곳입니다. 다른 곳을 비춰보세요!\n");
                 continue;
             }
 
@@ -93,20 +93,16 @@ public class DarkStage extends AbstractStage {
             tryCount++;
             String foundText = board[index];
 
-            System.out.println("\n🔦 " + choice + "번 위치를 비췄습니다...");
+            System.out.println("\n🔦 " + choice + "번 위치를 비췄습니다...\n");
 
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+            delay(200);
 
             if (foundText.equals("수업한다")) {
                 System.out.println("🎉 정답입니다! 진짜 [" + foundText + "] 를 찾았습니다!");
                 System.out.println("총 " + tryCount + "번 만에 성공하셨습니다.\n");
                 isCleared = true;
             } else {
-                System.out.println("❌ 앗! [" + foundText + "] (이)라고 적혀있네요. 가짜입니다!");
+                System.out.println("❌ 앗! [" + foundText + "] (이)라고 적혀있네요. 가짜입니다!\n");
             }
         }
 
@@ -159,6 +155,17 @@ public class DarkStage extends AbstractStage {
             if ((i + 1) % 6 == 0) {
                 System.out.println();
             }
+        }
+    }
+    private void delayAction(int millis, int dots) {
+        try {
+            for (int i = 0; i < dots; i++) {
+                Thread.sleep(millis);
+                System.out.print(".");
+            }
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 

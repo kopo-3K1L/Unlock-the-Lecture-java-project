@@ -5,10 +5,10 @@ import game.io.ConsoleIO;
 import java.util.Random;
 
 public class DragStage extends AbstractStage {
-    private final int ROWS = 5;
-    private final int COLS = 5;
+    private final int ROWS = 4;
+    private final int COLS = 4;
     private final int TOTAL_SLOTS = ROWS * COLS;
-    private final int RED_BTN_COUNT = 50;
+    private final int RED_BTN_COUNT = 30;
 
     private int[] stackCounts = new int[TOTAL_SLOTS];
     private int targetIndex;
@@ -38,31 +38,31 @@ public class DragStage extends AbstractStage {
         System.out.println(" / _, _/ /_/ / /_/ / /|  / /_/ /  ____/ /  ");
         System.out.println("/_/ |_|\\____/\\____/_/ |_/_____/  /_____/   ");
         System.out.println("                                           ");
+
+        delay(600);
         System.out.println("=========================================================");
         System.out.println("                   ⛏️ 버튼 발굴 현장 ⛏️                   ");
         System.out.println("=========================================================");
-        System.out.println("25개의 구역에 75개의 🔴[수업 안 함] 버튼이 쌓여있습니다.");
+        delay(600);
+
+        System.out.println("16개의 구역에 30개의 🔴[수업 안 함] 버튼이 쌓여있습니다.");
         System.out.println("단 한 곳의 맨 밑바닥에 🟢[수업한다] 버튼이 깔려있습니다.");
         System.out.println("구역 번호를 입력해 겹겹이 쌓인 붉은 버튼을 치워보세요!\n");
 
         System.out.print("발굴 장비 챙기는 중");
-        try {
-            for (int i = 0; i < 3; i++) {
-                Thread.sleep(600);
-                System.out.print(".");
-            }
-            System.out.println("\n");
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        delayAction(400, 3);
+        System.out.println("\n");
 
         boolean isCleared = false;
         int digCount = 0;
 
         while (!isCleared) {
             printBoard();
+            delay(400);
 
-            System.out.print("\n▶ 파낼 구역의 번호를 입력하세요 (1~25): ");
+            System.out.println("공통 명령어를 입력하려면 R 값에 skip / retry / exit 입력");
+            delay(200);
+            System.out.print("\n▶ 파낼 구역의 번호를 입력하세요 (1~16): ");
             String input = io.nextLine();
 
             StageResult commandResult = checkCommonCommand(input);
@@ -79,7 +79,7 @@ public class DragStage extends AbstractStage {
             }
 
             if (choice < 1 || choice > TOTAL_SLOTS) {
-                System.out.println("❌ 1부터 25 사이의 구역 번호를 입력해주세요.");
+                System.out.println("❌ 1부터 16 사이의 구역 번호를 입력해주세요.");
                 continue;
             }
 
@@ -87,27 +87,23 @@ public class DragStage extends AbstractStage {
             digCount++;
 
             System.out.print("⛏️ 땅을 파는 중");
-            try {
-                for (int i = 0; i < 3; i++) {
-                    Thread.sleep(300);
-                    System.out.print(".");
-                }
-                System.out.println();
-                Thread.sleep(400);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+            delayAction(200, 3);
+            System.out.println("\n");
 
             if (stackCounts[index] > 0) {
                 stackCounts[index]--;
-                System.out.println("으랏차! [" + choice + "번] 구역의 🔴[수업 안 함] 버튼을 치웠습니다.");
-                System.out.println("   (남은 붉은 버튼: " + stackCounts[index] + "개)");
-            } else if (index == targetIndex) {
-                System.out.println("심봤다! [" + choice + "번] 구역 맨 밑에서 🟢[수업한다] 버튼이 나왔습니다!");
-                System.out.println("총 " + digCount + "번의 삽질 끝에 발굴에 성공하셨습니다.");
-                isCleared = true;
+                System.out.println("으랏차! [" + choice + "번] 구역의 🔴[수업 안 함] 버튼을 치웠습니다.\n");
+                delay(200);
+
+                if (stackCounts[index] == 0 && index == targetIndex) {
+                    System.out.println("심봤다! [" + choice + "번] 구역 맨 밑에서 🔵[수업한다] 버튼이 나왔습니다!");
+                    System.out.println("총 " + digCount + "번의 삽질 끝에 발굴에 성공하셨습니다.\n");
+                    delay(200);
+                    isCleared = true;
+                }
             } else {
-                System.out.println("앗... [" + choice + "번] 구역은 흙바닥뿐입니다. 아무것도 없습니다.");
+                System.out.println("앗... [" + choice + "번] 구역은 흙바닥뿐입니다. 아무것도 없습니다.\n");
+                delay(200);
             }
         }
 
@@ -124,7 +120,12 @@ public class DragStage extends AbstractStage {
         targetIndex = random.nextInt(TOTAL_SLOTS);
         stackCounts = new int[TOTAL_SLOTS];
 
-        for (int i = 0; i < RED_BTN_COUNT; i++) {
+        int minTargetStack = 1;
+        stackCounts[targetIndex] = minTargetStack;
+
+        int remainingRedBtns = RED_BTN_COUNT - minTargetStack;
+
+        for (int i = 0; i < remainingRedBtns; i++) {
             int randomSlot = random.nextInt(TOTAL_SLOTS);
             stackCounts[randomSlot]++;
         }
@@ -147,6 +148,18 @@ public class DragStage extends AbstractStage {
             if (slotNum % COLS == 0) {
                 System.out.println("\n");
             }
+        }
+    }
+
+    private void delayAction(int millis, int dots) {
+        try {
+            for (int i = 0; i < dots; i++) {
+                Thread.sleep(millis);
+                System.out.print(".");
+            }
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 
