@@ -2,18 +2,16 @@ package game.stage;
 
 import game.io.ConsoleIO;
 import java.util.Random;
-import java.util.Scanner;
 
 public class LineStage extends AbstractStage {
     public volatile boolean running;
     private int blockPos = 20;
     private int targetLine;
     private final int MAX_HEIGHT = 20;
-    private final Scanner scanner = new Scanner(System.in);
+    
 
-    // 좌표 설정을 위한 오프셋 (아스키 아트가 출력될 공간 확보)
     private final int COLUMN_POS = 9;
-    private final int ROW_OFFSET = 12; // 아스키 아트 아래부터 그려지도록 조정
+    private final int ROW_OFFSET = 12;
 
     public LineStage(ConsoleIO io) {
         super(io);
@@ -26,36 +24,37 @@ public class LineStage extends AbstractStage {
 
     @Override
     public StageResult play() {
-        // 1. 초기화 및 화면 정리
         running = true;
         blockPos = MAX_HEIGHT;
-        System.out.print("\033[H\033[2J"); // 화면 전체 초기화
+        System.out.print("\033[H\033[2J"); 
         System.out.flush();
 
-        // 2. 아스키 아트 및 타이틀 출력
-        System.out.println("    ____                      __  _____");
+        System.out.println("    ____                    __  _____");
         System.out.println("   / __ \\____  __  ______  __/ / /__  /");
         System.out.println("  / /_/ / __ \\/ / / / __ \\/ / / /  / / ");
         System.out.println(" / _, _/ /_/ / /_/ / / / / /_/ /  / /  ");
         System.out.println("/_/ |_|\\____/\\__,_/_/ /_/\\__,_/  /_/   ");
-        System.out.println("                                       ");
+        System.out.println("                                        ");
         System.out.println("=========================================================");
         System.out.println("                🚨 선 넘지 마세요 제발! 🚨                ");
         System.out.println("=========================================================");
         System.out.println("움직이는 블럭이 골든 라인에 닿는 순간 [Enter]를 누르세요!");
+        System.out.println("(명령어 입력: skip / retry / exit)");
 
-        // 3. 게임 세팅
         Random random = new Random();
         targetLine = random.nextInt(15) + 2;
 
-        drawStaticFrame(); // 고정 프레임 그리기
-        display();         // 블록 이동 스레드 시작
+        drawStaticFrame(); 
+        display();
 
-        // 4. 입력 대기 및 스레드 중지
-        scanner.nextLine();
-        running = false;    // ★ 엔터 누르는 즉시 스레드 루프 종료
+        String input = io.nextLine();
+        running = false; 
 
-        // 5. 결과 판정 및 출력
+        StageResult commandResult = checkCommonCommand(input);
+        if (commandResult != null) {
+            return commandResult;
+        }
+
         moveCursor(ROW_OFFSET + MAX_HEIGHT + 3, 1);
         int result = checkResult(blockPos);
 
@@ -71,7 +70,6 @@ public class LineStage extends AbstractStage {
     }
 
     private void drawStaticFrame() {
-        // 주의: 여기서 화면 전체 초기화(\033[2J)를 하면 아스키 아트가 지워지므로 생략합니다.
         moveCursor(ROW_OFFSET - 1, 1);
         System.out.println("--------------------------");
 
@@ -86,7 +84,7 @@ public class LineStage extends AbstractStage {
 
         moveCursor(ROW_OFFSET + MAX_HEIGHT + 1, 1);
         System.out.println("--------------------------");
-        System.out.print("지금이다! [Enter]!!");
+        System.out.print("지금이다! [입력/Enter]!!");
     }
 
     private void display() {
@@ -94,14 +92,12 @@ public class LineStage extends AbstractStage {
             int lastPos = -1;
             try {
                 while (running) {
-                    // 이전 잔상 제거
                     if (lastPos != -1) {
                         moveCursor(ROW_OFFSET + lastPos, COLUMN_POS);
                         if (lastPos == targetLine) System.out.print("]");
                         else System.out.print("|");
                     }
 
-                    // 새 위치에 블록 출력
                     moveCursor(ROW_OFFSET + blockPos, COLUMN_POS);
                     System.out.print("■");
 
@@ -110,7 +106,7 @@ public class LineStage extends AbstractStage {
 
                     if (blockPos < 0) blockPos = MAX_HEIGHT;
 
-                    Thread.sleep(80); // 속도를 80ms로 살짝 올려서 난이도 조절 가능
+                    Thread.sleep(80); 
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -126,7 +122,7 @@ public class LineStage extends AbstractStage {
 
     private int checkResult(int pos) {
         int diff = Math.abs(pos - targetLine);
-        if (diff <= 1) { // 1칸 오차까지는 성공으로 인정
+        if (diff <= 1) { 
             System.out.println("★ SUCCESS! 완벽한 타이밍입니다!          ");
             return 1;
         } else {

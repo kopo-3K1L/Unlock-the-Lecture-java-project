@@ -2,11 +2,9 @@ package game.stage;
 
 import game.io.ConsoleIO;
 import java.util.Random;
-import java.util.Scanner;
 
 public class RouletteStage extends AbstractStage {
 
-    private final Scanner scanner = new Scanner(System.in);
     private Random random;
 
     public RouletteStage(ConsoleIO io) {
@@ -22,23 +20,29 @@ public class RouletteStage extends AbstractStage {
     public StageResult play() {
         String[] items = {"수업한다", "수염한다", "수압한다", "수엽한다", "수얌한다", "수엄한다"};
 
-        // 화면 초기화
         System.out.print("\033[H\033[2J");
         System.out.flush();
 
-        System.out.println("    ____                      __  ____ ");
+        System.out.println("    ____                    __  ____ ");
         System.out.println("   / __ \\____  __  ______  __/ / / __ \\");
         System.out.println("  / /_/ / __ \\/ / / / __ \\/ / / / /_/ /");
         System.out.println(" / _, _/ /_/ / /_/ / / / / /_/ / / __ / ");
         System.out.println("/_/ |_|\\____/\\__,_/_/ /_/\\__,_/ /____/  ");
-        System.out.println("                                       ");
+        System.out.println("                                        ");
         System.out.println("=========================================================");
-        System.out.println("            🎰 룰렛 돌리기: 멈춰! 억까 멈춰! 🎰            ");
+        System.out.println("           🎰 룰렛 돌리기: 멈춰! 억까 멈춰! 🎰            ");
         System.out.println("=========================================================");
+        System.out.println("공통 명령어: skip / retry / exit");
 
         while (true) {
             System.out.println("\n[Enter]를 누르면 운명의 룰렛을 돌립니다...");
-            scanner.nextLine();
+            
+            String input = io.nextLine();
+
+            StageResult commandResult = checkCommonCommand(input);
+            if (commandResult != null) {
+                return commandResult;
+            }
 
             System.out.println("💡 룰렛이 돌아가는 중... 5초 뒤 결과가 나옵니다!");
             String result = getGameResult(items);
@@ -63,7 +67,7 @@ public class RouletteStage extends AbstractStage {
         try {
             for (int i = 5; i > 0; i--) {
                 System.out.print(i + "... ");
-                System.out.flush(); // 숫자가 즉시 출력되도록 함
+                System.out.flush(); 
                 Thread.sleep(1000);
             }
         } catch (InterruptedException e) {
