@@ -1,6 +1,9 @@
 package game.stage;
 
 import game.io.ConsoleIO;
+import game.stage.core.AbstractStage;
+import game.stage.core.StageResult;
+import game.stage.core.StageResultType;
 
 public class UpDownStage extends AbstractStage {
 
@@ -17,30 +20,31 @@ public class UpDownStage extends AbstractStage {
         return "업다운 게임";
     }
 
+    /**
+     * <h2>
+     * 업다운 게임
+     * </h2>
+     * <p>
+     * 사용자는 제한된 횟수 안에 정답 숫자를 맞춰야 하며,<br>
+     * 입력값에 따라 범위를 점점 좁혀가면서 정답을 추리하는 게임입니다.
+     * 공통 명령어(skip, retry, exit) 가능
+     *
+     */
     @Override
     public StageResult play() {
-        System.out.println("    ____  ____  __  ___   ______     ___ ");
-        System.out.println("   / __ \\/ __ \\/ / / / | / / __ \\   |__ \\");
-        System.out.println("  / /_/ / / / / / / /  |/ / / / /   __/ /");
-        System.out.println(" / _, _/ /_/ / /_/ / /|  / /_/ /   / __/ ");
-        System.out.println("/_/ |_|\\____/\\____/_/ |_/_____/   /____/ ");
-        System.out.println("                                         ");
-        System.out.println("=========================================================");
-        System.out.println("                   ⬆️ 업다운 게임 ⬇️                   ");
-        System.out.println("=========================================================");
-        System.out.println("0~9 사이의 숫자를 4번 안에 맞춰보세요!");
-        System.out.println("힌트를 보고 범위를 좁혀나가면 수업한다!");
-        System.out.println("공통 명령어: skip(넘기기), retry(다시하기), exit(종료)\n");
+        printStageHeader(2, "                   ⬆️ 업다운 게임 ⬇️");
+        printGuide(
+                "0~9 사이의 숫자를 4번 안에 맞춰보세요!",
+                "힌트를 보고 범위를 좁혀나가면 수업한다!"
+        );
+        printCommandGuide();
 
-        System.out.print("숫자 뽑는 중");
-        for (int i = 0; i < 3; i++) {
-            sleep(600);
-            System.out.print(".");
-        }
-        System.out.println("\n");
+        printLoading("숫자 뽑는 중", 600, 3);
 
         int left = MIN;
         int right = MAX;
+
+        // 0 ~ 9 사이의 정답 숫자 생성
         int answer = (int) (Math.random() * (MAX + 1));
         int turn = MAX_TURNS;
 
@@ -49,12 +53,12 @@ public class UpDownStage extends AbstractStage {
             String input = io.nextLine();
 
             StageResult cmd = checkCommonCommand(input);
-            if (cmd != null) return cmd;
+            if (cmd != null) {
+                return cmd;
+            }
 
-            int guess;
-            try {
-                guess = Integer.parseInt(input);
-            } catch (NumberFormatException e) {
+            Integer guess = tryParseInt(input);
+            if (guess == null) {
                 io.println("숫자를 입력하세요.");
                 continue;
             }
@@ -67,7 +71,7 @@ public class UpDownStage extends AbstractStage {
             if (guess == answer) {
                 io.println("🎯 정답! [수업한다] 를 맞췄습니다!");
                 io.println("🎉 다음 스테이지(강의)가 열렸습니다!");
-                sleep(800);
+                delay(800);
                 return new StageResult(StageResultType.SUCCESS, "업다운 게임 클리어!");
             }
 
@@ -85,13 +89,5 @@ public class UpDownStage extends AbstractStage {
 
         io.println("땡! 정답: " + answer);
         return new StageResult(StageResultType.FAIL, "업다운 게임 실패!");
-    }
-
-    private void sleep(int ms) {
-        try {
-            Thread.sleep(ms);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
     }
 }

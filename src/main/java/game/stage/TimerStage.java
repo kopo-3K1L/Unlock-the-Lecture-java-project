@@ -1,6 +1,9 @@
 package game.stage;
 
 import game.io.ConsoleIO;
+import game.stage.core.AbstractStage;
+import game.stage.core.StageResult;
+import game.stage.core.StageResultType;
 
 public class TimerStage extends AbstractStage {
 
@@ -16,24 +19,26 @@ public class TimerStage extends AbstractStage {
         return "5초를 맞춰라";
     }
 
+    /**
+     * <h2>5초를 맞춰라</h2>
+     *
+     * <p>
+     * 사용자는 엔터를 눌러 타이머를 시작한 뒤,<br>
+     * 정확히 5초라고 생각되는 순간 다시 엔터를 눌러 멈춰야 합니다.
+     *
+     * <p>
+     * 목표 시간과의 오차가 일정 범위 이내이면 성공 <br>
+     * 공통 명령어(skip, retry, exit) 가능
+     */
     @Override
     public StageResult play() {
-        showIntro();
-
-        System.out.println("    ____  ____  __  ___   ______     ______");
-        System.out.println("   / __ \\/ __ \\/ / / / | / / __ \\   / ____/");
-        System.out.println("  / /_/ / / / / / / /  |/ / / / /  /___ \\  ");
-        System.out.println(" / _, _/ /_/ / /_/ / /|  / /_/ /  ____/ /  ");
-        System.out.println("/_/ |_|\\____/\\____/_/ |_/_____/  /_____/   ");
-        System.out.println("                                           ");
-        System.out.println("=========================================================");
-        System.out.println("                   ⏱️  5초를 맞춰라 ⏱️                   ");
-        System.out.println("=========================================================");
-        System.out.println("엔터를 눌러 타이머를 시작하세요.");
-        System.out.println("정확히 5초라고 생각되면 엔터를 다시 눌러 멈추세요.");
-        System.out.println("성공 기준: 5.00초 ± 0.30초");
-        System.out.println("공통 명령어는 시작 전 입력 가능: skip / retry / exit");
-        System.out.println();
+        printStageHeader(3, "                   ⏱️  5초를 맞춰라 ⏱️");
+        printGuide(
+                "엔터를 눌러 타이머를 시작하세요.",
+                "정확히 5초라고 생각되면 엔터를 다시 눌러 멈추세요.",
+                "성공 기준: 5.00초 ± 0.30초",
+                "공통 명령어는 시작 전 입력 가능: skip / retry / exit"
+        );
 
         String startInput = io.nextLine();
         StageResult commandResult = checkCommonCommand(startInput);
@@ -41,11 +46,12 @@ public class TimerStage extends AbstractStage {
             return commandResult;
         }
 
-        System.out.println("타이머 시작!");
-        System.out.println("멈추려면 엔터를 누르세요.\n");
+        io.println("타이머 시작!");
+        io.println("멈추려면 엔터를 누르세요.\n");
 
         final boolean[] stopped = {false};
 
+        // 엔터 입력을 별도 스레드에서 받아 타이머 정지 여부를 확인
         Thread inputThread = new Thread(() -> {
             io.nextLine();
             stopped[0] = true;
@@ -72,28 +78,19 @@ public class TimerStage extends AbstractStage {
         double result = (endTime - startTime) / 1000.0;
         double diff = Math.abs(TARGET_TIME - result);
 
-        System.out.println();
-        System.out.println("=========================================================");
+        io.println("=========================================================");
         System.out.printf("멈춘 시간: %.2f초%n", result);
         System.out.printf("목표와의 오차: %.2f초%n", diff);
 
         if (diff <= SUCCESS_RANGE) {
-            System.out.println("🎉 성공! 5초를 거의 완벽하게 맞췄습니다!");
-            System.out.println("🎉 다음 스테이지(강의)가 열렸습니다!");
+            io.println("🎉 성공! 5초를 거의 완벽하게 맞췄습니다!");
+            io.println("🎉 다음 스테이지(강의)가 열렸습니다!");
             delay(800);
             return new StageResult(StageResultType.SUCCESS, "타이머 게임 클리어!");
         } else {
-            System.out.println("❌ 실패! 5초와 너무 차이 납니다.");
-            System.out.println("다시 도전하세요.");
+            io.println("❌ 실패! 5초와 너무 차이 납니다.");
+            io.println("다시 도전하세요.");
             return new StageResult(StageResultType.FAIL, "타이머 게임 실패!");
-        }
-    }
-
-    private static void delay(int millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
         }
     }
 }
