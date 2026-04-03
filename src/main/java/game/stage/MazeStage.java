@@ -68,6 +68,7 @@ public class MazeStage extends AbstractStage {
 
         io.println("\n🧩 탈출 성공! [수업한다] 경로를 찾았습니다!");
         io.println("🎉 다음 스테이지(강의)가 열렸습니다!");
+        sleep(800);
         return new StageResult(StageResultType.SUCCESS, "미로 탈출 클리어!");
     }
 
