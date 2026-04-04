@@ -1,4 +1,4 @@
-package game.stage;
+package game.stage.core;
 
 public class StageResult {
     private final StageResultType type;

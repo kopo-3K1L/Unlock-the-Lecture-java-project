@@ -1,6 +1,10 @@
 package game.stage;
 
 import game.io.ConsoleIO;
+import game.stage.core.AbstractStage;
+import game.stage.core.StageResult;
+import game.stage.core.StageResultType;
+
 
 public class RGBStage extends AbstractStage {
     private final int targetR = 34;
@@ -17,87 +21,129 @@ public class RGBStage extends AbstractStage {
         return "색감 천재 모십니다";
     }
 
+    /**
+     * <h2>색감 천재 모십니다</h2>
+     *
+     * <p>
+     * 사용자는 R, G, B 값을 입력하여 목표 색상과 최대한 비슷한 색을 만듬<br>
+     * 입력한 색상과 목표 색상의 차이를 계산하여,<br>
+     * 오차가 기준값 이하이면 스테이지를 클리어
+     *
+     * <p>
+     * 공통 명령어(skip, retry, exit) 가능
+     */
     @Override
     public StageResult play() {
-        System.out.println("    ____  ____  __  ___   ______     __ __");
-        System.out.println("   / __ \\/ __ \\/ / / / | / / __ \\   / // /");
-        System.out.println("  / /_/ / / / / / / /  |/ / / / /  / // /_");
-        System.out.println(" / _, _/ /_/ / /_/ / /|  / /_/ /  /__  __/");
-        System.out.println("/_/ |_|\\____/\\____/_/ |_/_____/     /_/   ");
-        System.out.println("                                          ");
 
+        printStageHeader(4, "                  🎨 색감 천재 모십니다 🎨");
 
-        delay(600);
-        System.out.println("=========================================================");
-        System.out.println("                  🎨 색감 천재 모십니다 🎨                  ");
-        System.out.println("=========================================================");
-        delay(600);
+        io.println("목표: 아래의 [정답 색상]과 최대한 비슷한 색을 조합하세요!");
+        io.println("오차가 50 이하가 되면 다음 강의가 열립니다.\n");
 
-        System.out.println("목표: 아래의 [정답 색상]과 최대한 비슷한 색을 조합하세요!");
-        System.out.println("오차가 50 이하가 되면 다음 강의가 열립니다.\n");
-
-        System.out.print("팔레트 준비 중");
-        delayAction(200, 3);
-        System.out.println("\n");
+        printLoading("팔레트 준비 중", 200, 3);
 
         boolean isCleared = false;
 
         while (!isCleared) {
+
             printColorBlock("🎯 정답 색상:", targetR, targetG, targetB, false);
-            System.out.println();
+
             delay(800);
 
-            System.out.println("공통 명령어를 입력하려면 R 값에 skip / retry / exit 입력");
+            printCommandGuide();
             delay(200);
-            System.out.println("\n▶ R, G, B 값을 차례대로 입력하세요 (0~255)");
+            io.println("\n▶ R, G, B 값을 차례대로 입력하세요 (0~255)");
 
             io.print("R: ");
-            String firstInput = io.nextLine();
-
-            StageResult commandResult = checkCommonCommand(firstInput);
-            if (commandResult != null) {
-                return commandResult;
+            String rInput = io.nextLine();
+            StageResult rCommand = checkCommonCommand(rInput);
+            if (rCommand != null) {
+                return rCommand;
             }
 
-            int userR;
-            try {
-                userR = clamp(Integer.parseInt(firstInput));
-            } catch (NumberFormatException e) {
-                System.out.println("❌ 에러: 숫자만 입력할 수 있습니다! 다시 입력해주세요.");
+            Integer parsedR = tryParseInt(rInput);
+            if (parsedR == null) {
+                io.println("❌ R 값은 숫자만 입력할 수 있습니다! 다시 입력해주세요.");
                 continue;
             }
 
-            int userG = clamp(io.nextInt("G: "));
-            int userB = clamp(io.nextInt("B: "));
+            io.print("G: ");
+            String gInput = io.nextLine();
+            StageResult gCommand = checkCommonCommand(gInput);
+            if (gCommand != null) {
+                return gCommand;
+            }
 
-            System.out.print("\n🎨 색상 조합 및 오차 계산 중");
-            delayAction(400, 3);
-            System.out.println("\n");
+            Integer parsedG = tryParseInt(gInput);
+            if (parsedG == null) {
+                io.println("❌ G 값은 숫자만 입력할 수 있습니다! 다시 입력해주세요.");
+                continue;
+            }
+
+            io.print("B: ");
+            String bInput = io.nextLine();
+            StageResult bCommand = checkCommonCommand(bInput);
+            if (bCommand != null) {
+                return bCommand;
+            }
+
+            Integer parsedB = tryParseInt(bInput);
+            if (parsedB == null) {
+                io.println("❌ B 값은 숫자만 입력할 수 있습니다! 다시 입력해주세요.");
+                continue;
+            }
+
+            int userR = clamp(parsedR);
+            int userG = clamp(parsedG);
+            int userB = clamp(parsedB);
+
+            printLoading("\n🎨 색상 조합 및 오차 계산 중", 400, 3);
 
             printColorBlock("나의 색상:", userR, userG, userB, true);
 
-            int diff = Math.abs(targetR - userR) + Math.abs(targetG - userG) + Math.abs(targetB - userB);
+            // 목표 색상과 사용자 색상의 총 오차 계산
+            int diff = Math.abs(targetR - userR)
+                    + Math.abs(targetG - userG)
+                    + Math.abs(targetB - userB);
 
             if (diff <= THRESHOLD) {
-                System.out.println("\n✅ [ 수업한다 ] - 오차 범위 만족! (현재 오차: " + diff + " / 기준: 50)");
+                io.println("\n✅ [ 수업한다 ] - 오차 범위 만족! (현재 오차: " + diff + " / 기준: 50)");
                 isCleared = true;
             } else {
-                System.out.println("\n❌ [ 수업 안 함 ] - 오차 범위 초과! (현재 오차: " + diff + " / 기준: 50)");
-                System.out.println("색상이 너무 다릅니다. 다시 맞춰보세요!\n");
+                io.println("\n❌ [ 수업 안 함 ] - 오차 범위 초과! (현재 오차: " + diff + " / 기준: 50)");
+                io.println("색상이 너무 다릅니다. 다시 맞춰보세요!\n");
                 delay(600);
             }
         }
 
-        System.out.println("🎉 다음 스테이지(강의)가 열렸습니다!");
+        io.println("🎉 다음 스테이지(강의)가 열렸습니다!");
         delay(800);
 
         return new StageResult(StageResultType.SUCCESS, "RGB 게임 클리어!");
     }
 
+    /**
+     * <h2>
+     * RGB 값을 0 ~ 255 범위로 보정한다.
+     * </h2>
+     * @param value 사용자 입력값
+     * @return 범위를 벗어나지 않도록 보정된 값
+     */
     private int clamp(int value) {
         return Math.max(0, Math.min(255, value));
     }
 
+    /**
+     * <h2>
+     * ANSI 배경색을 사용하여 콘솔에 색상 블록을 출력
+     * </h2>
+     *
+     * @param label 출력할 라벨
+     * @param r red 값
+     * @param g green 값
+     * @param b blue 값
+     * @param showNumbers RGB 수치 표시 여부
+     */
     private void printColorBlock(String label, int r, int g, int b, boolean showNumbers) {
         String colorCode = String.format("\u001b[48;2;%d;%d;%dm", r, g, b);
         String resetCode = "\u001b[0m";
@@ -108,26 +154,6 @@ public class RGBStage extends AbstractStage {
             System.out.println(" (R: " + r + ", G: " + g + ", B: " + b + ")");
         } else {
             System.out.println(" (R: ???, G: ???, B: ???)");
-        }
-    }
-
-    private void delayAction(int millis, int dots) {
-        try {
-            for (int i = 0; i < dots; i++) {
-                Thread.sleep(millis);
-                System.out.print(".");
-            }
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
-
-    private static void delay(int millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
         }
     }
 }
