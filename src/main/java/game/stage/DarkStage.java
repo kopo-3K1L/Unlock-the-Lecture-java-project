@@ -66,7 +66,7 @@ public class DarkStage extends AbstractStage {
             delay(400);
 
             printCommandGuide();
-            delay(200);
+            delay(400);
 
             io.print("\n▶ 몇 번째 위치를 손전등으로 비추시겠습니까? (1~30): ");
             String input = io.nextLine();
@@ -100,7 +100,7 @@ public class DarkStage extends AbstractStage {
             String foundText = board[index];
 
             io.println("\n🔦 " + choice + "번 위치를 비췄습니다...\n");
-            delay(200);
+            delay(400);
 
             if ("수업한다".equals(foundText)) {
                 io.println("🎉 정답! [" + foundText + "] 발견!");

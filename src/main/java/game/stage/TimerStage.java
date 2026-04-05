@@ -36,11 +36,13 @@ public class TimerStage extends AbstractStage {
         printGuide(
                 "엔터를 눌러 타이머를 시작하세요.",
                 "정확히 5초라고 생각되면 엔터를 다시 눌러 멈추세요.",
-                "성공 기준: 5.00초 ± 0.30초",
-                "공통 명령어는 시작 전 입력 가능: skip / retry / exit"
+                "성공 기준: 5.00초 ± 0.30초"
         );
-
+        printCommandGuide();
+        io.print("▶ 엔터를 눌러 시작 ");
         String startInput = io.nextLine();
+        io.println("");
+
         StageResult commandResult = checkCommonCommand(startInput);
         if (commandResult != null) {
             return commandResult;
@@ -81,6 +83,8 @@ public class TimerStage extends AbstractStage {
         io.println("=========================================================");
         System.out.printf("멈춘 시간: %.2f초%n", result);
         System.out.printf("목표와의 오차: %.2f초%n", diff);
+        io.println("");
+        delay(800);
 
         if (diff <= SUCCESS_RANGE) {
             io.println("🎉 성공! 5초를 거의 완벽하게 맞췄습니다!");
@@ -90,6 +94,7 @@ public class TimerStage extends AbstractStage {
         } else {
             io.println("❌ 실패! 5초와 너무 차이 납니다.");
             io.println("다시 도전하세요.");
+            delay(800);
             return new StageResult(StageResultType.FAIL, "타이머 게임 실패!");
         }
     }

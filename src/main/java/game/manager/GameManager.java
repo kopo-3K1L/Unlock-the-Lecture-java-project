@@ -150,15 +150,19 @@ public class GameManager {
                 io.println("");
 
             } else if (result.getType() == StageResultType.RETRY) {
+                io.println("");
                 io.println("현재 스테이지를 다시 시작합니다.");
+                io.println("");
             } else if (result.getType() == StageResultType.EXIT) {
                 repository.save(progress);
                 return;
             } else if (result.getType() == StageResultType.FAIL) {
+                io.println("");
                 io.println("실패했습니다. 다시 도전하세요.");
+                io.println("");
             }
         }
-
+        io.println("");
         io.println("모든 스테이지를 클리어했습니다!");
         repository.save(progress);
     }

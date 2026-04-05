@@ -56,7 +56,10 @@ public class LineStage extends AbstractStage {
 
         printStageHeader(7, "                🚨 선 넘지 마세요 제발! 🚨");
         io.println("움직이는 블럭이 골든 라인에 닿는 순간 [Enter]를 누르세요!");
-        io.println("(명령어 입력: skip / retry / exit)");
+        printCommandGuide();
+        io.print("▶ 엔터를 눌러 시작 ");
+        String startInput = io.nextLine();
+        io.println("");
 
         targetLine = random.nextInt(TARGET_MAX - TARGET_MIN + 1) + TARGET_MIN;
 

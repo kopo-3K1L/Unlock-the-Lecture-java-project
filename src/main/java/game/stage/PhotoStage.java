@@ -46,6 +46,7 @@ public class PhotoStage extends AbstractStage {
         io.println("엔터를 눌러 사진을 찍으세요.");
         io.println("총 3번의 촬영 기회 중 2번 이상 성공하면 클리어입니다.");
         printCommandGuide();
+        io.print("▶ 엔터를 눌러 시작 ");
 
         String startInput = io.nextLine();
         StageResult commandResult = checkCommonCommand(startInput);

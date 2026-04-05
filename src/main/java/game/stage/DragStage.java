@@ -94,7 +94,7 @@ public class DragStage extends AbstractStage {
             if (stackCounts[index] > 0) {
                 stackCounts[index]--;
                 io.println("으랏차! [" + choice + "번] 구역의 🔴[수업 안 함] 버튼을 치웠습니다.\n");
-                delay(200);
+                delay(600);
 
                 // 현재 구역이 정답 위치이고,
                 // 마지막 빨간 버튼까지 모두 제거된 경우 클리어 처리
@@ -161,6 +161,8 @@ public class DragStage extends AbstractStage {
      * 초록색으로 정답 위치를 보여줍니다.
      */
     private void printBoard() {
+        io.println("=========================================================");
+        io.println("");
         for (int i = 0; i < TOTAL_SLOTS; i++) {
             int slotNum = i + 1;
 
@@ -171,12 +173,13 @@ public class DragStage extends AbstractStage {
                     System.out.printf("[%02d: 텅빔]  ", slotNum);
                 }
             } else {
-                System.out.printf(RED_BG + WHITE_TEXT + "[%02d: %2d층]" + RESET + "  ", slotNum, stackCounts[i]);
+                System.out.printf(RED_BG + "[%02d: %2d층]" + RESET + "  ", slotNum, stackCounts[i]);
             }
 
             if (slotNum % COLS == 0) {
                 System.out.println("\n");
             }
         }
+        io.println("=========================================================");
     }
 }

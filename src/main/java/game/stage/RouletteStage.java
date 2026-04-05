@@ -51,6 +51,7 @@ public class RouletteStage extends AbstractStage {
 
         while (true) {
             io.println("\n[Enter]를 누르면 운명의 룰렛을 돌립니다...");
+            io.print("▶ 엔터를 눌러 시작 ");
 
             String input = io.nextLine();
             StageResult commandResult = checkCommonCommand(input);
@@ -61,9 +62,11 @@ public class RouletteStage extends AbstractStage {
             io.println("💡 룰렛이 돌아가는 중... 5초 뒤 결과가 나옵니다!");
             String result = getGameResult();
 
+            io.println("");
             io.println("\n-----------------------------------------");
             io.println("결과: [" + result + "]");
             io.println("-----------------------------------------");
+            io.println("");
 
             if (isSuccess(result)) {
                 io.println("💀 억까 당했습니다... 수업 들을게요... (Stage Clear)");
@@ -107,7 +110,7 @@ public class RouletteStage extends AbstractStage {
             for (int i = COUNTDOWN_SECONDS; i > 0; i--) {
                 System.out.print(i + "... ");
                 System.out.flush();
-                Thread.sleep(1000);
+                Thread.sleep(500);
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

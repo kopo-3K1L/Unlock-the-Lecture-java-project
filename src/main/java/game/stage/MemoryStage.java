@@ -48,6 +48,7 @@ public class MemoryStage extends AbstractStage {
         io.println("같은 카드 2장을 맞추면 됩니다.");
         io.println("좌표는 행, 열 순서로 입력하세요. 예: 1 3");
         printCommandGuide();
+        io.println("");
 
         while (true) {
             printBoard();
@@ -114,6 +115,7 @@ public class MemoryStage extends AbstractStage {
                 io.println("✅ 짝을 맞췄습니다! [" + firstCard.value + "]");
             } else {
                 io.println("❌ 틀렸습니다. 잠시 후 다시 뒤집힙니다.");
+                io.println("");
                 delay(1000);
                 firstCard.revealed = false;
                 secondCard.revealed = false;
@@ -160,6 +162,7 @@ public class MemoryStage extends AbstractStage {
      * 아직 공개되지 않은 카드는 * 문자로 출력합니다.
      */
     private void printBoard() {
+        io.println("");
         io.println("현재 카드 상태");
         io.println("    1   2   3   4");
 
@@ -175,6 +178,7 @@ public class MemoryStage extends AbstractStage {
             }
             System.out.println();
         }
+        io.println("");
     }
 
     /**
