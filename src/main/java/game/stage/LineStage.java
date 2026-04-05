@@ -66,7 +66,6 @@ public class LineStage extends AbstractStage {
         drawStaticFrame();
         startDisplayThread();
 
-        // 사용자가 엔터를 누르는 즉시 blockPos를 캡처(판정 정확도 개선)
         String input = io.nextLine();
         running = false;
         int capturedPos = blockPos; 
@@ -78,7 +77,7 @@ public class LineStage extends AbstractStage {
 
         moveCursor(ROW_OFFSET + MAX_HEIGHT + 3, 1);
 
-        // 캡처된 위치로 성공 판정
+      
         if (isSuccess(capturedPos)) {
             io.println("\n🎉 축하합니다! 다음 강의(스테이지)가 열렸습니다!");
             delay(1200);
@@ -209,6 +208,30 @@ public class LineStage extends AbstractStage {
      * @param pos 입력 순간의 블럭 위치
      * @return 성공 여부
      */
+    /*
+     /*
+ * 입력 처리와 블록 이동 스레드 간의 Race Condition,
+ * 그리고 콘솔 출력 지연(Rendering Lag)으로 인해
+ * 화면과 실제 데이터 상태가 불일치하는 문제가 발생함.
+ *
+ * 그 결과, 콘솔 화면에서는 성공한 것처럼 보이지만
+ * 실제 판정 로직에서는 실패로 처리되는 현상이 발생함.
+ *
+ * [문제 원인 정리]
+ * 1. Race Condition (입력 vs 스레드 타이밍 문제)
+ *    사용자가 엔터를 누르는 순간 blockPos를 기준으로 판정하는 로직과
+ *    BLOCK_DELAY(80ms)마다 blockPos를 감소시키는 스레드가 동시에 실행됨.
+ *
+ *    이로 인해 눈으로는 맞는 타이밍처럼 보이더라도,
+ *    실제 판정 시점에는 blockPos가 이미 다른 칸으로 이동해 있을 수 있음.
+ *    2. Rendering Lag(시각적 진상 및 출력 지연)
+ *    콘솔 환경의 출력 성능 환경으로 인해, 메모리 상의 데이터 갱신 속도를
+ *    화면 출력이 실시간으로 따라 가지 못함
+ *    이로 인해 사용자는 지연된 이전 프레임을 기준으로 입력하게 되지만
+ *    실제 판정 로직은 더 앞선 현재의 blockPost 값을 기준으로 동작함
+ *    그 결과, 화면과 실제 데이터 간의 시간 차이로 인해 판정 불일치가 발생함
+ */
+    
     private boolean isSuccess(int pos) {
         int diff = Math.abs(pos - targetLine);
 
