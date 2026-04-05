@@ -8,6 +8,6 @@
 
 ## 📖 상세 문서 (Documentation)
 - [🏠 Home](../../wiki/Home): 프로젝트 개요 및 빠른 시작 가이드
-- [🏗 프로젝트 아키텍처](./Architecture): 계층형 구조와 추상화 설계
-- [🕹 스테이지별 상세 가이드](./Stage-Guide): 13개 스테이지의 로직 분석
-- [🛠️ Tech Stack](./Tech-Stack): 기술 스택
+- [🏗 프로젝트 아키텍처](../../wiki/Architecture): 계층형 구조와 추상화 설계
+- [🕹 스테이지별 상세 가이드](../../wiki/Stage-Guide): 13개 스테이지의 로직 분석
+- [🛠️ Tech Stack](../../wiki/Tech-Stack): 기술 스택
