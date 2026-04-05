@@ -66,8 +66,10 @@ public class LineStage extends AbstractStage {
         drawStaticFrame();
         startDisplayThread();
 
+        // 사용자가 엔터를 누르는 즉시 blockPos를 캡처(판정 정확도 개선)
         String input = io.nextLine();
         running = false;
+        int capturedPos = blockPos; 
 
         StageResult commandResult = checkCommonCommand(input);
         if (commandResult != null) {
@@ -76,7 +78,8 @@ public class LineStage extends AbstractStage {
 
         moveCursor(ROW_OFFSET + MAX_HEIGHT + 3, 1);
 
-        if (isSuccess(blockPos)) {
+        // 캡처된 위치로 성공 판정
+        if (isSuccess(capturedPos)) {
             io.println("\n🎉 축하합니다! 다음 강의(스테이지)가 열렸습니다!");
             delay(1200);
             return new StageResult(StageResultType.SUCCESS, "선 넘지 마세요 제발 클리어!");
@@ -159,15 +162,19 @@ public class LineStage extends AbstractStage {
 
                     moveCursor(ROW_OFFSET + blockPos, COLUMN_POS);
                     System.out.print("■");
-
+                    System.out.flush();
                     lastPos = blockPos;
+                    Thread.sleep(BLOCK_DELAY);
+                    if(!running) {
+                  	  break;
+                    }
+                    
                     blockPos--;
-
+                    
                     if (blockPos < 0) {
                         blockPos = MAX_HEIGHT;
                     }
 
-                    Thread.sleep(BLOCK_DELAY);
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
